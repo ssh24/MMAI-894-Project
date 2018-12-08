@@ -21,8 +21,8 @@ import matplotlib.pyplot as plt
 import quandl
 
 #------------------------------------------------------------------------------
-# set up api key 
-#quandl.ApiConfig.api_key = "YOUR_KEY_HERE"
+# set up quandl api key 
+quandl.ApiConfig.api_key = "RcoFDV2VLyhEeYcwjQwW"
 
 #------------------------------------------------------------------------------
 # IMPORT FILES
@@ -36,16 +36,18 @@ outputdir = 'D:\QUEENS MMAI\894 Deep\Team Project\Output'
 os.chdir(outputdir)
 #------------------------------------------------------------------------------
 
+data = quandl.get("EIA/PET_RWTC_D", start_date="2001-12-31", end_date="2005-12-31",collapse="monthly")
 
 
-mydata = quandl.get("FRED/GDP")
 
+data = quandl.get_table('WIKI/PRICES', qopts = { 'columns': ['ticker', 'date', 'close'] }, ticker = ['AAPL', 'MSFT'], date = { 'gte': '2016-01-01', 'lte': '2016-12-31' })
+
+data = quandl.get_table('MER/F1', paginate=True, ticker = ['AAPL', 'MSFT'])
 
 '''
 NOTES 
 
+I have no real care about what the data is... don't really know enough
 Ill have to try proper scraping some other time
-
-
 
 '''
