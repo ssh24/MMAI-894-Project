@@ -110,7 +110,8 @@ plt.savefig('1.0-ng-daily-stock-market-data-open-price-JPM-w-Bollinger-filled.pn
             dpi=300)
 print(plt.show())
 
-# Prepare data for LSTM RNN modelling 
+# Prepare data for LSTM RNN modelling
+# NOTE: NORMALLY HAVE THIS AS PART OF MY ACTUAL MODEL CODE
 
 # Determine prediction period
 num_days_pred = 60
@@ -119,12 +120,15 @@ num_days_pred = 60
 data_train = data[:(len(data) - num_days_pred)]  # All stock data except last 60 days
 data_test = data[-num_days_pred:] # Last 60 days of stock data
 
-data_train.shape
-data_test.shape
+# Check the shape of the training and test data
+print(data_train.shape)
+print(data_test.shape)
 
-data_train.describe().T
+# Describe the training and test data
+print(data_train.describe().T)
+print(data_test.describe().T)
 
-# create a numpy array of 1 column that we care about - Open Stock Price
+# Create a numpy array of 1 column that we care about - Open Stock Price
 training_set = data_train.iloc[:, 1:2].values
 
 # Get the real Opening stock prices for last 60 days
@@ -135,6 +139,7 @@ real_stock_price = data_test.iloc[:, 1:2].values
 sc = MinMaxScaler(feature_range=(0, 1),
                   copy=True)
 
+# Scale the training set
 training_set_scaled = sc.fit_transform(training_set)
 
 # Create a data structure with 60 timesteps and 1 output (use the previous
@@ -160,3 +165,14 @@ X_train = np.reshape(X_train,
                       X_train.shape[1], # number of columns in x_train
                       1))  # number of input layers (currently only opening price)
 
+print(X_train.view())
+
+print("X_train ndim: ", X_train.ndim)
+print("X_train shape:", X_train.shape)
+print("X_train size: ", X_train.size)
+
+print(y_train.view())
+
+print("y_train ndim: ", y_train.ndim)
+print("y_train shape:", y_train.shape)
+print("y_train size: ", y_train.size)
