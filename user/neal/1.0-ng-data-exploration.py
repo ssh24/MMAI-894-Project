@@ -20,23 +20,20 @@ warnings.simplefilter(action='ignore', category=FutureWarning)
 # %reset -f
 
 # Set the plotting style
-print(plt.style.available)
+# print(plt.style.available)
 plt.style.use('seaborn-whitegrid')
 
 # Import the training set
 filename = '0.0-sh-data-JPM.csv'
 data = pd.read_csv(filename)
-data.head()
-data.shape
 
-# ### Sort DataFrame by date
+# Sort DataFrame by date
 data = data.sort_values('Date')
 
 # Double check the result
 print(data.head())
 
-# ### Visualize the data
-# Plot all the data
+# Visualize the data
 print(data.plot(figsize=(12, 6)))
 
 # Opening Price
@@ -119,6 +116,32 @@ num_days_pred = 60
 # Split data into Training and Test sets
 data_train = data[:(len(data) - num_days_pred)]  # All stock data except last 60 days
 data_test = data[-num_days_pred:] # Last 60 days of stock data
+
+# Plot Training set
+plt.figure(figsize=(12, 6))
+plt.plot(range(data_train.shape[0]), data_train['Open'])
+plt.xticks(range(0, data_train.shape[0], 251), data_train['Date'].loc[::251], rotation=90)
+plt.title('Daily Stock Price (Open): JPM [Training Data]')
+plt.xlabel('Date', fontsize=14)
+plt.ylabel('Open Price (USD)', fontsize=14)
+
+plt.savefig('1.0-ng-training-data-JPM-open.png',
+            bbox_inches='tight',
+            dpi=300)
+print(plt.show())
+
+# Plot Test set
+plt.figure(figsize=(12, 6))
+plt.plot(range(data_test.shape[0]), data_test['Open'])
+plt.xticks(range(0, data_test.shape[0], num_days_pred - 1), data_test['Date'].loc[::num_days_pred - 1], rotation=90)
+plt.title('Daily Stock Price (Open): JPM [Test Data]')
+plt.xlabel('Date', fontsize=14)
+plt.ylabel('Open Price (USD)', fontsize=14)
+
+plt.savefig('1.0-ng-test-data-JPM-open.png',
+            bbox_inches='tight',
+            dpi=300)
+print(plt.show())
 
 # Check the shape of the training and test data
 print(data_train.shape)
