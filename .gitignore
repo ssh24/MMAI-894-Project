@@ -6,6 +6,10 @@ __pycache__/
 # C extensions
 *.so
 
+/user/neal/config.py
+/user/neal/.vscode
+
+
 # Distribution / packaging
 .Python
 build/
