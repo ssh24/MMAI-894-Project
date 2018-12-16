@@ -15,15 +15,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 import datetime as dt
-import pandas_datareader.data as web
 import quandl
-from pandas_datareader.data import Options
-import urllib.request
-import json
-import tensorflow as tf
-from sklearn.preprocessing import MinMaxScaler
 
-import config  # stores API keys
+
+# import config  # stores API keys
 
 import warnings
 
@@ -34,7 +29,7 @@ warnings.simplefilter(action='ignore', category=FutureWarning)
 # %reset -f # reset environment if needed
 
 # Set the plotting style
-plt.style.use('bmh')
+plt.style.use('seaborn-whitegrid')
 
 # Set the date range
 now = dt.datetime.now()
@@ -48,7 +43,7 @@ stock_symbol = 'JPM'
 ##########
 # # Quandl API
 ##########
-quandl.ApiConfig.api_key = config.quandl_api_key
+quandl.ApiConfig.api_key = 'DaRhFhyMvSAHvZQ6uvn-'
 df_quandl = quandl.get('EOD/%s' % stock_symbol,
                        start_date=start_date, end_date=end_date)
 
@@ -59,16 +54,18 @@ print(df_quandl.columns.values)
 print(df_quandl.head())
 
 # Save data to file
-save_to_file = '../data/processed/0.0-ng-quandl-daily-stock-market-data-%s.csv' % stock_symbol
-
-if not os.path.exists(save_to_file):
-    print('Data saved to : %s' % save_to_file)
-    df_quandl.to_csv(save_to_file, index=True)
-
-# If the data is already there, just load it from the CSV
-else:
-    print('This file already exists. Loading data from CSV')
-    df_quandl = pd.read_csv(save_to_file)
+#save_to_file = '/data/processed/1.0-ng-quandl-daily-stock-market-data-%s.csv' % stock_symbol
+#
+#print(save_to_file)
+#
+#if not os.path.exists(save_to_file):
+#    print('Data saved to : %s' % save_to_file)
+#    df_quandl.to_csv(save_to_file, index=False)
+#
+## If the data is already there, just load it from the CSV
+#else:
+#    print('This file already exists. Loading data from CSV')
+#    df_quandl = pd.read_csv(save_to_file)
 
 # ### Sort DataFrame by date
 df_quandl = df_quandl.sort_values('Date')
@@ -89,7 +86,7 @@ plt.xlabel('Date', fontsize=14)
 plt.ylabel('Mid Price', fontsize=14)
 
 
-plt.savefig('../reports/figures/0.0-ng-quandl-daily-stock-market-data-price-%s-mid.png' % stock_symbol,
+plt.savefig('/reports/figures/0.0-ng-quandl-daily-stock-market-data-price-%s-mid.png' % stock_symbol,
             bbox_inches='tight',
             dpi=300)
 print(plt.show())
@@ -104,7 +101,7 @@ plt.xlabel('Date', fontsize=14)
 plt.ylabel('Open Price', fontsize=14)
 
 
-plt.savefig('../reports/figures/0.0-ng-quandl-daily-stock-market-data-price-%s-open.png' % stock_symbol,
+plt.savefig('/reports/figures/0.0-ng-quandl-daily-stock-market-data-price-%s-open.png' % stock_symbol,
             bbox_inches='tight',
             dpi=300)
 print(plt.show())
@@ -119,7 +116,7 @@ plt.xlabel('Date', fontsize=14)
 plt.ylabel('Close Price', fontsize=14)
 
 
-plt.savefig('../reports/figures/0.0-ng-quandl-daily-stock-market-data-price-%s-close.png' % stock_symbol,
+plt.savefig('/reports/figures/0.0-ng-quandl-daily-stock-market-data-price-%s-close.png' % stock_symbol,
             bbox_inches='tight',
             dpi=300)
 print(plt.show())
@@ -134,7 +131,7 @@ plt.xlabel('Date', fontsize=14)
 plt.ylabel('Volume', fontsize=14)
 
 
-plt.savefig('../reports/figures/0.0-ng-quandl-daily-stock-market-data-volume-%s.png' % stock_symbol,
+plt.savefig('/reports/figures/0.0-ng-quandl-daily-stock-market-data-volume-%s.png' % stock_symbol,
             bbox_inches='tight',
             dpi=300)
 print(plt.show())
