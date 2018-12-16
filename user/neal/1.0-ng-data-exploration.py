@@ -8,9 +8,9 @@ Created on Sun Dec 16 11:17:25 2018
 
 import os
 import pandas as pd
+import numpy as np
 import matplotlib.pyplot as plt
-import datetime as dt
-import quandl
+from sklearn.preprocessing import MinMaxScaler
 
 import warnings
 
@@ -109,3 +109,54 @@ plt.savefig('1.0-ng-daily-stock-market-data-open-price-JPM-w-Bollinger-filled.pn
             bbox_inches='tight',
             dpi=300)
 print(plt.show())
+
+# Prepare data for LSTM RNN modelling 
+
+# Determine prediction period
+num_days_pred = 60
+
+# Split data into Training and Test sets
+data_train = data[:(len(data) - num_days_pred)]  # All stock data except last 60 days
+data_test = data[-num_days_pred:] # Last 60 days of stock data
+
+data_train.shape
+data_test.shape
+
+data_train.describe().T
+
+# create a numpy array of 1 column that we care about - Open Stock Price
+training_set = data_train.iloc[:, 1:2].values
+
+# Get the real Opening stock prices for last 60 days
+real_stock_price = data_test.iloc[:, 1:2].values
+
+# Feature Scaling
+# With RNNs it is recommended to apply normalization for feature scaling
+sc = MinMaxScaler(feature_range=(0, 1),
+                  copy=True)
+
+training_set_scaled = sc.fit_transform(training_set)
+
+# Create a data structure with 60 timesteps and 1 output (use the previous
+# 60 days' stock prices to predict the next output = 3 months of prices)
+X_train = []
+y_train = []
+
+for i in range(num_days_pred, len(data_train)):  
+    
+    # append the previous 60 days' stock prices
+    X_train.append(training_set_scaled[i - num_days_pred:i, 0])
+    
+    # predict the stock price on the next day
+    y_train.append(training_set_scaled[i, 0])
+
+# Convert X_train and y_train to numpy arrays
+X_train, y_train = np.array(X_train), np.array(y_train)
+
+# Reshape the data to add additional indicators (e.g. volume, closing price, etc.)
+# if needed (currently only predicting opening price)
+X_train = np.reshape(X_train,
+                     (X_train.shape[0],  # number of rows in x_train
+                      X_train.shape[1], # number of columns in x_train
+                      1))  # number of input layers (currently only opening price)
+
