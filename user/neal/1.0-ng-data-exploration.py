@@ -20,4 +20,3 @@ import warnings
 warnings.simplefilter(action='ignore', category=DeprecationWarning)
 warnings.simplefilter(action='ignore', category=FutureWarning)
 # %reset -f
-
