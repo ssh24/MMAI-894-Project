@@ -133,3 +133,6 @@ print(0.1 * round((end - start) / 6))
 
 # Add an end of work message
 os.system('say "your model has finished processing"')
+
+# Print summary of the neural network architecture
+print(model.summary())
