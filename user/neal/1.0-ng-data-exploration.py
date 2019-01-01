@@ -70,7 +70,8 @@ data['Upper Band'] = data['30 Day MA'] + (data['30 Day STD'] * 2)
 data['Lower Band'] = data['30 Day MA'] - (data['30 Day STD'] * 2)
 
 # Simple 30 Day Bollinger Band for JPM
-data[['Adj_Close', '30 Day MA', 'Upper Band', 'Lower Band']].plot(figsize=(12,6))
+data[['Adj_Close', '30 Day MA', 'Upper Band',
+      'Lower Band']].plot(figsize=(12, 6))
 plt.title('30 Day Bollinger Band for JPM')
 plt.xlabel('Day', fontsize=14)
 plt.xticks(range(0, data.shape[0], 251), data['Date'].loc[::251], rotation=90)
@@ -82,7 +83,7 @@ plt.savefig('1.0-ng-daily-stock-market-data-open-price-JPM-w-Bollinger.png',
 print(plt.show())
 
 # ### Coloured Bollinger Bands
-fig = plt.figure(figsize=(12,6))
+fig = plt.figure(figsize=(12, 6))
 ax = fig.add_subplot(111)
 
 # Get index values for the X axis for JPM DataFrame
@@ -114,31 +115,34 @@ print(plt.show())
 num_days_pred = 60
 
 # Split data into Training and Test sets
-data_train = data[:(len(data) - num_days_pred)]  # All stock data except last 60 days
-data_test = data[-num_days_pred:] # Last 60 days of stock data
+# All stock data except last 60 days
+data_train = data[:(len(data) - num_days_pred)]
+data_test = data[-num_days_pred:]  # Last 60 days of stock data
 
 # Plot Training set
 plt.figure(figsize=(12, 6))
-plt.plot(range(data_train.shape[0]), data_train['Open'])
-plt.xticks(range(0, data_train.shape[0], 251), data_train['Date'].loc[::251], rotation=90)
-plt.title('Daily Stock Price (Open): JPM [Training Data]')
+plt.plot(range(data_train.shape[0]), data_train['Adj_Open'])
+plt.xticks(range(0, data_train.shape[0], 251),
+           data_train['Date'].loc[::251], rotation=90)
+plt.title('Daily Stock Price (Adj. Open): JPM [Training Data]')
 plt.xlabel('Date', fontsize=14)
-plt.ylabel('Open Price (USD)', fontsize=14)
+plt.ylabel('Adj. Open Price (USD)', fontsize=14)
 
-plt.savefig('1.0-ng-training-data-JPM-open.png',
+plt.savefig('1.0-ng-training-data-JPM-adj-open.png',
             bbox_inches='tight',
             dpi=300)
 print(plt.show())
 
 # Plot Test set
 plt.figure(figsize=(12, 6))
-plt.plot(range(data_test.shape[0]), data_test['Open'])
-plt.xticks(range(0, data_test.shape[0], num_days_pred - 1), data_test['Date'].loc[::num_days_pred - 1], rotation=90)
-plt.title('Daily Stock Price (Open): JPM [Test Data]')
+plt.plot(range(data_test.shape[0]), data_test['Adj_Open'])
+plt.xticks(range(0, data_test.shape[0], num_days_pred - 1),
+           data_test['Date'].loc[::num_days_pred - 1], rotation=90)
+plt.title('Daily Stock Price (Adj. Open): JPM [Test Data]')
 plt.xlabel('Date', fontsize=14)
-plt.ylabel('Open Price (USD)', fontsize=14)
+plt.ylabel('Adj. Open Price (USD)', fontsize=14)
 
-plt.savefig('1.0-ng-test-data-JPM-open.png',
+plt.savefig('1.0-ng-test-data-JPM-adj-open.png',
             bbox_inches='tight',
             dpi=300)
 print(plt.show())
@@ -152,10 +156,10 @@ print(data_train.describe().T)
 print(data_test.describe().T)
 
 # Create a numpy array of 1 column that we care about - Open Stock Price
-training_set = data_train.iloc[:, 1:2].values
+training_set = data_train.iloc[:, 8:9].values
 
 # Get the real Opening stock prices for last 60 days
-real_stock_price = data_test.iloc[:, 1:2].values
+real_stock_price = data_test.iloc[:, 8:9].values
 
 # Feature Scaling
 # With RNNs it is recommended to apply normalization for feature scaling
@@ -170,11 +174,11 @@ training_set_scaled = sc.fit_transform(training_set)
 X_train = []
 y_train = []
 
-for i in range(num_days_pred, len(data_train)):  
-    
+for i in range(num_days_pred, len(data_train)):
+
     # append the previous 60 days' stock prices
     X_train.append(training_set_scaled[i - num_days_pred:i, 0])
-    
+
     # predict the stock price on the next day
     y_train.append(training_set_scaled[i, 0])
 
@@ -185,7 +189,7 @@ X_train, y_train = np.array(X_train), np.array(y_train)
 # if needed (currently only predicting opening price)
 X_train = np.reshape(X_train,
                      (X_train.shape[0],  # number of rows in x_train
-                      X_train.shape[1], # number of columns in x_train
+                      X_train.shape[1],  # number of columns in x_train
                       1))  # number of input layers (currently only opening price)
 
 print(X_train.view())
