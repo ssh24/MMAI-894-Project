@@ -27,3 +27,22 @@ from keras.layers import LSTM, Dense, Dropout
 from keras.utils.vis_utils import plot_model
 
 # %matplotlib inline
+
+# Determine prediction period
+num_days_pred = 80
+
+# Import the training set
+data = pd.read_csv('0.0-sh-data-JPM.csv')
+
+data.describe().T
+
+# Split data into Training and Test sets
+# All stock data except last 60 days
+data_train = data[:(len(data) - num_days_pred)]
+data_test = data[-num_days_pred:]  # Last n days of stock data
+
+# Create a numpy array of 1 column that we care about - Adj Open Stock Price
+training_set = data_train.iloc[:, 8:9].values
+
+# Get the real Opening stock prices for the last n days
+real_stock_price = data_test.iloc[:, 8:9].values
