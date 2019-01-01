@@ -46,3 +46,11 @@ training_set = data_train.iloc[:, 8:9].values
 
 # Get the real Opening stock prices for the last n days
 real_stock_price = data_test.iloc[:, 8:9].values
+
+# Feature Scaling
+# With RNNs it is recommended to apply normalization for feature scaling
+sc = MinMaxScaler(feature_range=(0, 1),
+                  copy=True)
+
+# Scale the training set
+training_set_scaled = sc.fit_transform(training_set)
