@@ -164,3 +164,24 @@ predicted_stock_price = model.predict(X_test)
 
 # Invert the feature scaling
 predicted_stock_price = sc.inverse_transform(predicted_stock_price)
+
+# Set the plotting style
+plt.style.use('seaborn-whitegrid')
+
+# Visualize the results
+plt.figure(figsize=(12, 6))
+plt.plot(real_stock_price,
+         color='red',
+         label='Real JPM Stock Price (Last 80 Days)')
+plt.plot(predicted_stock_price,
+         color='blue',
+         label='Predicted JPM Stock Price (Last 80 Days)')
+plt.title('JPM Stock Price Prediction')
+plt.xlabel('Time')
+plt.ylabel('Stock Price (USD)')
+plt.legend()
+
+plt.savefig('3.0-ng-basic-lstm-rnn-model-last-%s-days-100-epochs.png' % num_days_pred,
+            bbox_inches='tight',
+            dpi=300)
+print(plt.show())
