@@ -112,3 +112,64 @@ X_train = np.reshape(X_train,
                      (X_train.shape[0],  # number of rows in x_train
                       X_train.shape[1],  # number of columns in x_train
                       1))  # number of input layers (currently only opening price)
+# print(X_train.view())
+
+print("X_train ndim: ", X_train.ndim)
+print("X_train shape:", X_train.shape)
+print("X_train size: ", X_train.size)
+
+# print(y_train.view())
+
+print("y_train ndim: ", y_train.ndim)
+print("y_train shape:", y_train.shape)
+print("y_train size: ", y_train.size)
+
+# Part 2: Build the Recurrent Neural Network (RNN) Model
+
+# Add a timer
+start = timer()
+
+
+def create_model(units=50,
+                 dropout_rate=0.2,
+                 loss='mean_squared_error',
+                 optimizer='adam'):
+
+    # make input layer
+    model = Sequential()
+
+    # Add the 1st LSTM layer with Dropout regularization
+    model.add(LSTM(units=units,  # number of memory cells (neurons) in this layer
+                   return_sequences=True,
+                   input_shape=(X_train.shape[1], 1)))
+    model.add(Dropout(rate=dropout_rate))
+
+    # Add a 2nd LSTM layer with Dropout regularization
+    model.add(LSTM(units=units,  # number of memory cells (neurons) in this layer
+                   return_sequences=True))
+    model.add(Dropout(rate=dropout_rate))
+
+    # Add a 3rd LSTM layer with Dropout regularization
+    model.add(LSTM(units=units,  # number of memory cells (neurons) in this layer
+                   return_sequences=True))
+    model.add(Dropout(rate=dropout_rate))
+
+   # Add hidden layers
+#   for i in range(n_hidden_layers):
+#       model.add(LSTM(units=n_neurons_middle,  # number of memory cells (neurons) in this layer
+#                      return_sequences=True))
+#       model.add(Dropout(dropout_rate))
+
+    # Add final hidden layer
+    # number of memory cells (neurons) in this layer
+    model.add(LSTM(units=units))
+    model.add(Dropout(rate=dropout_rate))
+
+    # Add the output layer
+    model.add(Dense(units=1))
+
+    # Compile the Recurrent Neural Network (RNN)
+    model.compile(optimizer=optimizer, metrics=['mse'],
+                  loss=loss)
+
+    return model
