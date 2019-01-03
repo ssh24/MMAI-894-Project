@@ -32,12 +32,12 @@ from keras.utils.vis_utils import plot_model
 num_days_pred = 80
 
 # Import the training set
-data = pd.read_csv('0.0-sh-data-JPM.csv')
+data = pd.read_csv('../data/processed/0.0-sh-data-JPM.csv')
 
 data.describe().T
 
 # Split data into Training and Test sets
-# All stock data except last 60 days
+# All stock data except last n days
 data_train = data[:(len(data) - num_days_pred)]
 data_test = data[-num_days_pred:]  # Last n days of stock data
 
@@ -85,9 +85,9 @@ X_train = np.reshape(X_train,
 start = timer()
 
 # Set params
-learning_rate = 0.2
+dropout_rate = 0.2
 batch_size = 32
-epochs = 100
+epochs = 500
 
 # Initialize the RNN
 model = Sequential()
@@ -96,22 +96,22 @@ model = Sequential()
 model.add(LSTM(units=num_days_pred,  # number of memory cells (neurons) in this layer
                return_sequences=True,
                input_shape=(X_train.shape[1], 1)))
-model.add(Dropout(rate=learning_rate))
+model.add(Dropout(rate=dropout_rate))
 
 # Add a 2nd LSTM layer with Dropout regularization
 model.add(LSTM(units=num_days_pred,  # number of memory cells (neurons) in this layer
                return_sequences=True))
-model.add(Dropout(rate=learning_rate))
+model.add(Dropout(rate=dropout_rate))
 
 # Add a 3rd LSTM layer with Dropout regularization
 model.add(LSTM(units=num_days_pred,  # number of memory cells (neurons) in this layer
                return_sequences=True))
-model.add(Dropout(rate=learning_rate))
+model.add(Dropout(rate=dropout_rate))
 
 # Add a 4th (and last) LSTM layer with Dropout regularization
 # number of memory cells (neurons) in this layer
 model.add(LSTM(units=num_days_pred))
-model.add(Dropout(rate=learning_rate))
+model.add(Dropout(rate=dropout_rate))
 
 # Add the output layer
 model.add(Dense(units=1))
@@ -173,12 +173,12 @@ plt.plot(real_stock_price,
 plt.plot(predicted_stock_price,
          color='blue',
          label='Predicted JPM Stock Price (Last %s Days)' % num_days_pred)
-plt.title('JPM Stock Price Prediction')
+plt.title('JPM Stock Price Prediction (%s Days : %s Epochs)' % (num_days_pred, epochs))
 plt.xlabel('Time')
 plt.ylabel('Stock Price (USD)')
 plt.legend()
 
-plt.savefig('3.0-ng-basic-lstm-rnn-model-last-%s-days-100-epochs.png' % num_days_pred,
+plt.savefig('../reports/figures/3.0-ng-basic-lstm-rnn-model-last-%s-days-%s-epochs.png' % (num_days_pred, epochs),
             bbox_inches='tight',
             dpi=300)
 print(plt.show())
