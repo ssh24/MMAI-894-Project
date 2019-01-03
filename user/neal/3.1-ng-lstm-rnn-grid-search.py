@@ -24,3 +24,13 @@ from keras.models import Sequential  # Initializes the Neural Network
 from keras.layers import Dense, Dropout, LSTM
 from keras.utils.vis_utils import plot_model
 from keras.wrappers.scikit_learn import KerasRegressor
+
+# %matplotlib inline
+
+# Determine prediction period
+num_days_pred = 80
+
+# Import the training set
+data = pd.read_csv('../data/processed/0.0-sh-data-JPM.csv')
+print(data.head())
+print(data.shape)
