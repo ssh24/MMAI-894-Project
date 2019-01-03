@@ -186,3 +186,28 @@ epochs = 100
 batch_size = 32
 optimizer = ['adam', 'RMSprop']
 loss = ['mean_squared_error']
+
+# create model
+model = KerasRegressor(build_fn=create_model,
+                       verbose=1)
+
+# param grid
+param_grid = dict(units=units,
+                  dropout_rate=dropout_rate,
+                  loss=loss,
+                  optimizer=optimizer)
+
+# Define grid search
+grid = GridSearchCV(estimator=model,
+                    param_grid=param_grid,
+                    verbose=1,
+                    cv=5)
+
+# Fit the Recurrent Neural Network (RNN) to the Training Set
+gs = grid.fit(X_train,
+              np.ravel(y_train),
+              batch_size=batch_size,
+              epochs=epochs)
+
+# Summarize training results
+print("Best Score: %f using %s" % (gs.best_score_, gs.best_params_))
