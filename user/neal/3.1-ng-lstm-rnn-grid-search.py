@@ -173,3 +173,16 @@ def create_model(units=50,
                   loss=loss)
 
     return model
+
+
+# Set random seed
+seed = 42
+np.random.seed(seed)
+
+# define the grid search parameters
+units = [25, 50]
+dropout_rate = [0.2, 0.3, 0.5]
+epochs = 100
+batch_size = 32
+optimizer = ['adam', 'RMSprop']
+loss = ['mean_squared_error']
