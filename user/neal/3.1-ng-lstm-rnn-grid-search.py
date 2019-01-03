@@ -211,3 +211,33 @@ gs = grid.fit(X_train,
 
 # Summarize training results
 print("Best Score: %f using %s" % (gs.best_score_, gs.best_params_))
+
+# Elapsed time in minutes
+end = timer()
+print('Elapsed time in minutes: ')
+print(0.1 * round((end - start) / 6))
+
+# Add an end of work message
+os.system('say "your model has finished processing"')
+
+# Part 3: Make Prediction and Visualize the Results
+# Get the predicted Open stock prices for last n days
+data_total = data['Adj_Open']
+
+# first financial day is the difference between the length of the dataset_total and dataset_test
+inputs = data_total[len(data_total) - len(data_test) - num_days_pred:].values
+inputs = inputs.reshape(-1, 1)
+inputs = sc.transform(inputs)  # Scale the inputs
+
+X_test = []
+for i in range(num_days_pred, len(data_test) + num_days_pred):
+    # append the previous n days' stock prices
+    X_test.append(inputs[i-num_days_pred:i, 0])
+
+X_test = np.array(X_test)
+X_test = np.reshape(X_test, (X_test.shape[0], X_test.shape[1], 1))
+predicted_stock_price = gs.predict(X_test)
+
+# Invert the feature scaling
+predicted_stock_price = sc.inverse_transform(
+    predicted_stock_price.reshape(-1, 1))
