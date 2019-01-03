@@ -174,7 +174,8 @@ plt.plot(predicted_stock_price,
          color='blue',
          label='Predicted JPM Stock Price (Last %s Days)' % num_days_pred)
 plt.title('JPM Stock Price Prediction (%s Days : %s Epochs)' % (num_days_pred, epochs))
-plt.xlabel('Time')
+plt.xticks(range(0, data_test.shape[0], 5), data_test['Date'].loc[::5], rotation=90)
+plt.xlabel('Date')
 plt.ylabel('Stock Price (USD)')
 plt.legend()
 
