@@ -75,3 +75,9 @@ print(data_train.describe().T)
 # Describe the test data
 print(data_test.shape)
 print(data_test.describe().T)
+
+# Create a numpy array of 1 column that we care about - Adj Open Stock Price
+training_set = data_train.iloc[:, 8:9].values
+
+# Get the real Adj Opening stock prices for last n days
+real_stock_price = data_test.iloc[:, 8:9].values
