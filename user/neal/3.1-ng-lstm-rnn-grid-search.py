@@ -34,3 +34,8 @@ num_days_pred = 80
 data = pd.read_csv('../data/processed/0.0-sh-data-JPM.csv')
 print(data.head())
 print(data.shape)
+
+# Split data into Training and Test sets
+# All stock data except last 60 days
+data_train = data[:(len(data) - num_days_pred)]
+data_test = data[-num_days_pred:]  # Last n days of stock data
