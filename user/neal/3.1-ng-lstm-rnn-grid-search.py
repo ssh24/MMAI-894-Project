@@ -67,3 +67,11 @@ plt.savefig('../reports/figures/3.1-ng-test-data-JPM-adj-open.png',
             bbox_inches='tight',
             dpi=300)
 print(plt.show())
+
+# Describe the training data
+print(data_train.shape)
+print(data_train.describe().T)
+
+# Describe the test data
+print(data_test.shape)
+print(data_test.describe().T)
