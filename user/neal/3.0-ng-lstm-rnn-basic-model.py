@@ -139,9 +139,6 @@ print(model.summary())
 
 # Part 3: Make Prediction and Visualize the Results
 # Get the predicted Open stock prices for last n days
-# data_total = pd.concat(
-#    (data_train['Open'], data_test['Open']), axis=0)
-
 data_total = data['Adj_Open']
 
 # first financial day is the difference between the length of the dataset_total and dataset_test
@@ -172,10 +169,10 @@ plt.style.use('seaborn-whitegrid')
 plt.figure(figsize=(12, 6))
 plt.plot(real_stock_price,
          color='red',
-         label='Real JPM Stock Price (Last 80 Days)')
+         label='Real JPM Stock Price (Last %s Days)' % num_days_pred)
 plt.plot(predicted_stock_price,
          color='blue',
-         label='Predicted JPM Stock Price (Last 80 Days)')
+         label='Predicted JPM Stock Price (Last %s Days)' % num_days_pred)
 plt.title('JPM Stock Price Prediction')
 plt.xlabel('Time')
 plt.ylabel('Stock Price (USD)')
