@@ -163,3 +163,32 @@ for index in range(0, len(stock_symbols)):
     # All stock data except last 60 days
     data_train = df_alpha[:(len(df_alpha) - num_days_pred)]
     data_test = df_alpha[-num_days_pred:]  # Last n days of stock data
+
+    # Plot Training set
+    plt.figure(figsize=(12, 6))
+    plt.plot(range(data_train.shape[0]), data_train['Adjusted Close'])
+    plt.xticks(range(0, data_train.shape[0], 251),
+               data_train['Date'].loc[::251], rotation=90)
+    plt.title(
+        'Daily Stock Price (Adj. Close): %s [Training Data]' % stock_symbol)
+    plt.xlabel('Date', fontsize=14)
+    plt.ylabel('Adj. Close Price', fontsize=14)
+
+    plt.savefig('../reports/figures/3.0-ng-training-data-%s-adj-close-%s.png' % (stock_symbol, file_date),
+                bbox_inches='tight',
+                dpi=300)
+    print(plt.show())
+
+    # Plot Test set
+    plt.figure(figsize=(12, 6))
+    plt.plot(range(data_test.shape[0]), data_test['Adjusted Close'])
+    plt.xticks(range(0, data_test.shape[0], 5),
+               data_test['Date'].loc[::5], rotation=90)
+    plt.title('Daily Stock Price (Adj. Close): %s [Test Data]' % stock_symbol)
+    plt.xlabel('Date', fontsize=14)
+    plt.ylabel('Adj. Close Price', fontsize=14)
+
+    plt.savefig('../reports/figures/3.0-ng-test-data-%s-adj-close-%s.png' % (stock_symbol, file_date),
+                bbox_inches='tight',
+                dpi=300)
+    print(plt.show())
