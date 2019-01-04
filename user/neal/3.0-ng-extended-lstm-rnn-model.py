@@ -192,3 +192,25 @@ for index in range(0, len(stock_symbols)):
                 bbox_inches='tight',
                 dpi=300)
     print(plt.show())
+
+#    # Describe the training data
+#    print(data_train.shape)
+#    print(data_train.describe().T)
+#
+#    # Describe the test data
+#    print(data_test.shape)
+#    print(data_test.describe().T)
+
+    # Create a numpy array of 1 column that we care about - Adj Close Stock Price
+    training_set = data_train.iloc[:, 5:6].values
+
+    # Get the real Adj Closing stock prices for last n days
+    real_stock_price = data_test.iloc[:, 5:6].values
+
+    # Feature Scaling
+    # With RNNs it is recommended to apply normalization for feature scaling
+    sc = MinMaxScaler(feature_range=(0, 1),
+                      copy=True)
+
+    # Scale the training set
+    training_set_scaled = sc.fit_transform(training_set)
