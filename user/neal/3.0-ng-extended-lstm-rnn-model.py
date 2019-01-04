@@ -214,3 +214,26 @@ for index in range(0, len(stock_symbols)):
 
     # Scale the training set
     training_set_scaled = sc.fit_transform(training_set)
+
+    # Create a data structure with n timesteps and 1 output (use the previous
+    # n days' stock prices to predict the next output = n/20 months of prices)
+    X_train = []
+    y_train = []
+
+    for i in range(num_days_pred, len(data_train)):
+
+        # append the previous 60 days' stock prices
+        X_train.append(training_set_scaled[i - num_days_pred:i, 0])
+
+        # predict the stock price on the next day
+        y_train.append(training_set_scaled[i, 0])
+
+    # Convert X_train and y_train to numpy arrays
+    X_train, y_train = np.array(X_train), np.array(y_train)
+
+    # Reshape the data to add additional indicators (e.g. volume, closing price, etc.)
+    # if needed (currently only predicting opening price)
+    X_train = np.reshape(X_train,
+                         (X_train.shape[0],  # number of rows in x_train
+                          X_train.shape[1],  # number of columns in x_train
+                          1))  # number of input layers (currently only opening price)
