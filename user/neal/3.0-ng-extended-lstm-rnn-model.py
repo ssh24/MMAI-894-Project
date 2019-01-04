@@ -237,3 +237,58 @@ for index in range(0, len(stock_symbols)):
                          (X_train.shape[0],  # number of rows in x_train
                           X_train.shape[1],  # number of columns in x_train
                           1))  # number of input layers (currently only opening price)
+
+    # Part 2: Build the Recurrent Neural Network (RNN) Model
+    # Import the required Keras libraries and packages
+
+    # Add a timer
+    start = timer()
+
+    # Initialize the RNN
+    model = Sequential()
+
+    # Add the 1st LSTM layer with Dropout regularization
+    model.add(LSTM(units=num_days_pred,  # number of memory cells (neurons) in this layer
+                   return_sequences=True,
+                   input_shape=(X_train.shape[1], 1)))
+    model.add(Dropout(rate=dropout_rate))
+
+    # Add a 2nd LSTM layer with Dropout regularization
+    model.add(LSTM(units=num_days_pred,  # number of memory cells (neurons) in this layer
+                   return_sequences=True))
+    model.add(Dropout(rate=dropout_rate))
+
+    # Add a 3rd LSTM layer with Dropout regularization
+    model.add(LSTM(units=num_days_pred,  # number of memory cells (neurons) in this layer
+                   return_sequences=True))
+    model.add(Dropout(rate=dropout_rate))
+
+    # Add a 4th (and last) LSTM layer with Dropout regularization
+    # number of memory cells (neurons) in this layer
+    model.add(LSTM(units=num_days_pred))
+    model.add(Dropout(rate=dropout_rate))
+
+    # Add the output layer
+    model.add(Dense(units=1))
+
+    # Compile the Recurrent Neural Network (RNN)
+    model.compile(optimizer='adam',
+                  loss='mean_squared_error')
+
+    # Fit the Recurrent Neural Network (RNN) to the Training Set
+    model.fit(x=X_train,
+              y=y_train,
+              batch_size=batch_size,
+              epochs=epochs,
+              verbose=0)
+
+    # Elapsed time in minutes
+    end = timer()
+    print('Elapsed time in minutes: ')
+    print(0.1 * round((end - start) / 6))
+
+    # Add an end of work message
+    os.system('say "your %s model has finished processing"' % stock_symbol)
+
+    # Print summary of the neural network architecture
+    print(model.summary())
