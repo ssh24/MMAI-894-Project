@@ -40,3 +40,27 @@ warnings.simplefilter(action='ignore', category=DeprecationWarning)
 warnings.simplefilter(action='ignore', category=FutureWarning)
 
 # %reset -f
+
+# Set random seed
+seed = 42
+np.random.seed(seed)
+
+# Set the plotting style
+plt.style.use('seaborn-whitegrid')
+
+# Set the date range
+now = dt.datetime.now()
+file_date = now.strftime('%Y-%m-%d')
+
+start_date = dt.datetime(now.year - 10, now.month, now.day)
+start_date = start_date.strftime('%Y-%m-%d')
+#end_date = dt.datetime(now.year, now.month, now.day)
+#end_date = pd.to_datetime(end_date)
+
+# Determine prediction period
+num_days_pred = 80
+
+# Set params
+dropout_rate = 0.2
+batch_size = 32
+epochs = 500
