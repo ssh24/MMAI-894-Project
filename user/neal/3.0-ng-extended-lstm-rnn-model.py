@@ -64,3 +64,60 @@ num_days_pred = 80
 dropout_rate = 0.2
 batch_size = 32
 epochs = 500
+
+##########
+# # Alpha Vantage API
+##########
+api_key = config.alpha_vantage_api_key
+
+# Import list of stocks
+# Use 'TSX:' to identify Canadian stocks
+stock_symbols = ['AAPL', 'IBM', 'TSLA', 'RY', 'JPM']
+
+# Loop through each stock in list
+for index in range(0, len(stock_symbols)):
+
+    stock_symbol = stock_symbols[index]
+
+    print("\n*********** STOCK SYMBOL: %s ***********\n" % stock_symbol)
+
+    url_string_daily = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=%s&outputsize=full&apikey=%s" % (
+        stock_symbol, api_key)
+
+    # Save data to file
+    save_to_file = '../data/processed/3.0-ng-alpha-vantage-intraday-stock-market-data-%s-%s.csv' % (
+        stock_symbol, file_date)
+
+    # Store date, open, high, low, close, adjusted close, volume, and dividend amount values
+    # to a Pandas DataFrame
+    with urllib.request.urlopen(url_string_daily) as url:
+        data = json.loads(url.read().decode())
+        # extract stock market data
+        data = data['Time Series (Daily)']
+        df_alpha = pd.DataFrame(columns=['Date',
+                                         'Open',
+                                         'High',
+                                         'Low',
+                                         'Close',
+                                         'Adjusted Close',
+                                         'Volume',
+                                         'Dividend Amount'])
+
+        for k, v in data.items():
+            date = dt.datetime.strptime(k, '%Y-%m-%d')
+            data_row = [date.date(),
+                        float(v['1. open']),
+                        float(v['2. high']),
+                        float(v['3. low']),
+                        float(v['4. close']),
+                        float(v['5. adjusted close']),
+                        float(v['6. volume']),
+                        float(v['7. dividend amount'])]
+            df_alpha.loc[-1, :] = data_row
+            df_alpha.index = df_alpha.index + 1
+    print('Data saved to : %s' % save_to_file)
+    df_alpha.to_csv(save_to_file, index=False)
+
+    # Load it from the CSV
+    print('This file already exists. Loading data from CSV')
+    df_alpha = pd.read_csv(save_to_file)
