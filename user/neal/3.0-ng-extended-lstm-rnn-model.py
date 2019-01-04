@@ -146,3 +146,20 @@ for index in range(0, len(stock_symbols)):
                 bbox_inches='tight',
                 dpi=300)
     print(plt.show())
+
+    # ### Splitting Data into Training and Test
+    # Define price variables for training and testing purposes
+#    open_prices = df_alpha.loc[:, 'Open'].values
+#    close_prices = df_alpha.loc[:, 'Close'].values
+#    adj_close_prices = df_alpha.loc[:, 'Adjusted Close'].values
+#    high_prices = df_alpha.loc[:, 'High'].values
+#    low_prices = df_alpha.loc[:, 'Low'].values
+#    mid_prices = (high_prices + low_prices) / 2.0
+
+    # ### NOTE: We can't use train_test_split because it would randomly pick rows and the
+    # ### order of rows is critical to our analysis
+
+    # Split data into Training and Test sets
+    # All stock data except last 60 days
+    data_train = df_alpha[:(len(df_alpha) - num_days_pred)]
+    data_test = df_alpha[-num_days_pred:]  # Last n days of stock data
