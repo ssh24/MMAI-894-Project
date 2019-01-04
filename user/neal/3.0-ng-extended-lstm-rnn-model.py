@@ -121,3 +121,28 @@ for index in range(0, len(stock_symbols)):
     # Load it from the CSV
     print('This file already exists. Loading data from CSV')
     df_alpha = pd.read_csv(save_to_file)
+
+    # ### Sort DataFrame by date
+    df_alpha = df_alpha.sort_values('Date')
+
+    # Filter data to last n years from start_date
+    df_alpha = df_alpha[(df_alpha['Date'] > start_date)]
+
+    # Double check the result
+#    print(df_alpha.head())
+
+#    print(df_alpha.plot(figsize=(12, 6)))
+
+    # ### Visualize the Adjusted Close Price
+    plt.figure(figsize=(12, 6))
+    plt.plot(range(df_alpha.shape[0]), df_alpha['Adjusted Close'])
+    plt.xticks(range(0, df_alpha.shape[0], 251),
+               df_alpha['Date'].loc[::251], rotation=90)
+    plt.title('Daily Stock Price (Adj Close): %s' % stock_symbol)
+    plt.xlabel('Date', fontsize=14)
+    plt.ylabel('Adj. Close Price', fontsize=14)
+
+    plt.savefig('../reports/figures/3.0-ng-alpha-vantage-daily-stock-market-data-adj-close-price-%s.png' % stock_symbol,
+                bbox_inches='tight',
+                dpi=300)
+    print(plt.show())
