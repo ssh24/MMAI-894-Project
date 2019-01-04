@@ -292,3 +292,51 @@ for index in range(0, len(stock_symbols)):
 
     # Print summary of the neural network architecture
     print(model.summary())
+
+    # Part 3: Make Prediction and Visualize the Results
+    # Get the predicted Open stock prices for last n days
+    data_total = df_alpha['Adjusted Close']
+
+    # first financial day is the difference between the length of the dataset_total and dataset_test
+    inputs = data_total[len(data_total) -
+                        len(data_test) - num_days_pred:].values
+    inputs = inputs.reshape(-1, 1)
+    inputs = sc.transform(inputs)  # Scale the inputs
+
+    X_test = []
+
+    for i in range(num_days_pred, len(data_test) + num_days_pred):
+        # append the previous n days' stock prices
+        X_test.append(inputs[i-num_days_pred:i, 0])
+
+    X_test = np.array(X_test)
+    X_test = np.reshape(X_test,
+                        (X_test.shape[0],
+                         X_test.shape[1], 1))
+
+    predicted_stock_price = model.predict(X_test)
+
+    # Invert the feature scaling
+    predicted_stock_price = sc.inverse_transform(predicted_stock_price)
+
+    # Visualize the results
+    # Visualize only predicted period
+    plt.figure(figsize=(12, 6))
+    plt.plot(real_stock_price,
+             color='red',
+             label='Real %s Stock Price (Last %s Days)' % (stock_symbol, num_days_pred))
+    plt.plot(predicted_stock_price,
+             color='blue',
+             label='Predicted %s Stock Price (Last %s Days)' % (stock_symbol, num_days_pred))
+    plt.title('%s Stock Price Prediction (%s Days : %s Epochs)' %
+              (stock_symbol, num_days_pred, epochs))
+    plt.xticks(range(0, data_test.shape[0], 5),
+               data_test['Date'].loc[::5], rotation=90)
+    plt.xlabel('Time')
+    plt.ylabel('Stock Price')
+    plt.legend()
+
+    plt.savefig('../reports/figures/3.0-ng-lstm-rnn-grid-search-model-%s-last-%s-days-%s-epochs.png' % (stock_symbol, num_days_pred, epochs),
+                bbox_inches='tight',
+                dpi=300)
+    print(plt.show())
