@@ -51,8 +51,8 @@ file_date = now.strftime('%Y-%m-%d')
 
 start_date = dt.datetime(now.year - 10, now.month, now.day)
 start_date = start_date.strftime('%Y-%m-%d')
-#end_date = dt.datetime(now.year, now.month, now.day)
-#end_date = pd.to_datetime(end_date)
+# end_date = dt.datetime(now.year, now.month, now.day)
+# end_date = pd.to_datetime(end_date)
 
 # Determine prediction period
 num_days_pred = 80
