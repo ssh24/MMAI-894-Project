@@ -6,7 +6,7 @@ Created on Sun Dec 16 11:17:25 2018
 @author: nealgilmore
 """
 
-import os
+# import os
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
