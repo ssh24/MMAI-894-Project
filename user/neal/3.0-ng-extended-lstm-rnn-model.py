@@ -137,7 +137,7 @@ for index in range(0, len(stock_symbols)):
     plt.xlabel('Date', fontsize=14)
     plt.ylabel('Adj. Close Price', fontsize=14)
 
-    plt.savefig('../reports/figures/3.0-ng-alpha-vantage-daily-stock-market-data-adj-close-price-{}.png'.format(stock_symbol),
+    plt.savefig('../reports/figures/3.0-ng-alpha-vantage-daily-stock-market-data-adj-close-price-{}-{}.png'.format(stock_symbol, file_date),
                 bbox_inches='tight',
                 dpi=300)
     print(plt.show())
